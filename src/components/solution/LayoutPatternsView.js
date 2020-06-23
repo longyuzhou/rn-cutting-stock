@@ -14,17 +14,25 @@ export default function LayoutPatternsView({
   html.append(`
   <div>
     <strong>切割方案:</strong>
-    <div class="row">
-      <div class="col-2">所需材料:</div>
-      <div class="col-2">${requiredStocks}</div>
+    <div class="d-flex flex-column flex-sm-row">
+      <div class="flex-grow-1">
+        <span class="p-1">所需材料:</span>
+        <span class="p-1">${requiredStocks}</span>
+      </div>
     </div>
-    <div class="row">
-      <div class="col-2">余料总长:</div>
-      <div class="col-2">${round(materialWaste, 2) || ''}</div>
-      <div class="col-2">切割损耗:</div>
-      <div class="col-2">${round(cutWaste, 2) || ''}</div>
-      <div class="col-2">损耗合计:</div>
-      <div class="col-2">${totalWaste}(${round(totalWastePercentage, 2)}%)</div>
+    <div class="d-flex flex-column flex-sm-row">
+      <div class="flex-grow-1">
+        <span class="p-1">余料总长:</span>
+        <span class="p-1">${round(materialWaste, 2) || ''}</span>
+      </div>
+      <div class="flex-grow-1">
+        <span class="p-1">切割损耗:</span>
+        <span class="p-1">${round(cutWaste, 2) || ''}</span>
+      </div>
+      <div class="flex-grow-1">
+        <span class="p-1">损耗合计:</span>
+        <span class="p-1">${totalWaste}(${round(totalWastePercentage, 2) || 0}%)</span>
+      </div>
     </div>
     <table class="table table-striped table-bordered">
       <thead>

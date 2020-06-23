@@ -22,7 +22,11 @@ export default function App() {
               component={CuttingStockView}
               options={{ title: '材料切割' }}
             />
-            <Stack.Screen name="Output" component={SolutionView} options={{ title: '切割方案' }} />
+            <Stack.Screen
+              name="Output"
+              component={SolutionView}
+              options={{ title: '切割方案', headerBackTitle: '返回' }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </KeyboardAvoidingView>

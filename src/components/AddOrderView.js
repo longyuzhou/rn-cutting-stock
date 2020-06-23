@@ -1,13 +1,10 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Input, Button, Text, Item, Label, Icon } from 'native-base';
-
-import styles from '../styles';
+import { View, Button } from 'react-native';
+import { Input, Item, Label } from 'native-base';
+import * as Icons from './Icons';
 import { toFloat, toInt } from '../utils';
 
-export default function AddOrderView(props) {
-  const { addOrder } = props;
-
+export default function AddOrderView({ addOrder }) {
   const [length, setLength] = React.useState('');
   const [lengthValid, setLengthValid] = React.useState(true);
 
@@ -16,14 +13,14 @@ export default function AddOrderView(props) {
 
   const onLengthChange = (text) => {
     setLength(text);
-    const num = toFloat(text);
-    setLengthValid(text === '' || (!isNaN(num) && num > 0));
+    const val = toFloat(text);
+    setLengthValid(text === '' || (!isNaN(val) && val > 0));
   };
 
   const onCountChange = (text) => {
     setCount(text);
-    const num = toInt(text);
-    setCountValid(text === '' || (!isNaN(num) && num > 0));
+    const val = toInt(text);
+    setCountValid(text === '' || (!isNaN(val) && val > 0));
   };
 
   const submit = () => {
@@ -38,21 +35,21 @@ export default function AddOrderView(props) {
   };
 
   return (
-    <View style={{ ...props.style, ...styles.horizontal }}>
-      <Item error={!lengthValid} style={{ flex: 1, marginRight: 5 }}>
+    <View style={{ flexDirection: 'row' }}>
+      <Item style={{ flex: 1, marginRight: 5 }}>
         <Label>尺寸:</Label>
         <Input value={length} keyboardType="numeric" onChangeText={onLengthChange} />
+        {length !== '' ? lengthValid ? <Icons.Valid /> : <Icons.Invalid /> : null}
       </Item>
 
-      <Item error={!countValid} style={{ flex: 1, marginRight: 5 }}>
+      <Item style={{ flex: 1, marginRight: 5 }}>
         <Label>数量:</Label>
         <Input value={count} keyboardType="numeric" onChangeText={onCountChange} />
+        {count !== '' ? countValid ? <Icons.Valid /> : <Icons.Invalid /> : null}
       </Item>
 
       <View style={{ justifyContent: 'center' }}>
-        <Button success onPress={submit}>
-          <Icon type="FontAwesome" name="plus" />
-        </Button>
+        <Button title="添加" onPress={submit} />
       </View>
     </View>
   );

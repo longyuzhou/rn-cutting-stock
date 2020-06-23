@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, FlatList } from 'react-native';
-import { Input, Button, Text, Item, Label, Icon } from 'native-base';
-import styles from '../styles';
+import { View, FlatList, StyleSheet } from 'react-native';
+import { Input, Button, Text, Item, Label } from 'native-base';
 import OrderView from './OrderView';
 import AddOrderView from './AddOrderView';
+import * as Icons from './Icons';
 import { solve, toFloat } from '../utils';
 
 export default function CuttingStockView({ navigation }) {
@@ -76,16 +76,18 @@ export default function CuttingStockView({ navigation }) {
   };
 
   return (
-    <View style={{ ...styles.container, ...styles.vertical }}>
+    <View style={{ flex: 1, flexDirection: 'column' }}>
       <View style={{ margin: 5 }}>
-        <Item success={stockLengthValid} error={!stockLengthValid}>
+        <Item>
           <Label>材料长度:</Label>
           <Input keyboardType="numeric" value={stockLength} onChangeText={onStockLengthChange} />
+          {stockLengthValid ? <Icons.Valid /> : <Icons.Invalid />}
         </Item>
 
-        <Item success={kerfValid} error={!kerfValid}>
+        <Item>
           <Label>切割损耗:</Label>
           <Input keyboardType="numeric" value={kerf} onChangeText={onKerfChange} />
+          {kerfValid ? <Icons.Valid /> : <Icons.Invalid />}
         </Item>
 
         <AddOrderView addOrder={addOrder} />

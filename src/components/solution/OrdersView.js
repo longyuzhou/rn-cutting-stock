@@ -5,11 +5,15 @@ export default function OrdersView({ stockLength, kerf, orders }) {
   html.append(`
     <div>
     <strong>订单</strong>
-    <div class="row">
-      <div class="col-2">材料长度:</div>
-      <div class="col-2">${stockLength}</div>
-      <div class="col-2">切割损耗:</div>
-      <div class="col-2">${kerf}</div>
+    <div class="d-flex flex-column flex-sm-row">
+      <div class="flex-grow-1">
+        <span class="p-1">材料长度:</span>
+        <span class="p-1">${stockLength}</span>
+      </div>
+      <div class="flex-grow-1">
+        <span class="p-1">切割损耗:</span>
+        <span class="p-1">${kerf}</span>
+      </div>
     </div>
     <table class="table table-striped table-bordered">
       <thead>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Button, ListItem, Text, Body, Right, Icon } from 'native-base';
-import styles from '../styles';
+import { Text, ListItem, Body, Button, Right } from 'native-base';
+
+import * as Icons from './Icons';
 
 export default function OrderView({ order, modifyOrder }) {
   const { length, count } = order;
@@ -24,15 +25,15 @@ export default function OrderView({ order, modifyOrder }) {
         <Text>{`${length} × ${count}`}</Text>
       </Body>
       <Right>
-        <View style={styles.horizontal}>
-          <Button small danger onPress={zero} style={{ marginRight: 5 }}>
-            <Icon type="FontAwesome" name="trash" />
+        <View style={{ flexDirection: 'row' }}>
+          <Button small transparent onPress={zero}>
+            <Icons.Delete />
           </Button>
-          <Button small danger onPress={decrement} style={{ marginRight: 5 }}>
-            <Icon type="FontAwesome" name="minus" />
+          <Button small transparent onPress={decrement}>
+            <Icons.Decrement />
           </Button>
-          <Button small success onPress={increment} style={{ marginRight: 5 }}>
-            <Icon type="FontAwesome" name="plus" />
+          <Button small transparent onPress={increment}>
+            <Icons.Increment />
           </Button>
         </View>
       </Right>
