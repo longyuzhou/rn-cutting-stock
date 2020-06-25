@@ -1,38 +1,49 @@
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View } from 'react-native';
-import { Text, ListItem, Body, Button, Right } from 'native-base';
+import { Text, ListItem, Body, Button, Right, Left } from 'native-base';
 
+import { Context, checkOrder } from '../context';
 import * as Icons from './Icons';
 
-export default function OrderView({ order, modifyOrder }) {
-  const { length, count } = order;
+export default function OrderView({ order, index }) {
+  const { stockLength, orders, setOrders } = useContext(Context);
+  const [valid, setValid] = useState(true);
 
-  const increment = () => {
-    modifyOrder({ length, count: count + 1 });
+  useEffect(() => setValid(checkOrder({ stockLength, order })), [stockLength]);
+
+  const incrementCount = () => {
+    orders[index].count++;
+    setOrders(orders.slice());
   };
 
-  const decrement = () => {
-    modifyOrder({ length, count: count - 1 });
+  const decrementCount = () => {
+    if (order.length <= 1) {
+      remove();
+    }
+    orders[index].count--;
+    setOrders(orders.slice());
   };
 
-  const zero = () => {
-    modifyOrder({ length, count: 0 });
+  const remove = () => {
+    orders.splice(index, 1);
+    setOrders(orders.slice());
   };
 
   return (
-    <ListItem>
+    <ListItem icon>
+      <Left>{valid ? <Icons.Valid /> : <Icons.Invalid />}</Left>
       <Body>
-        <Text>{`${length} × ${count}`}</Text>
+        <Text>{`${order.length} × ${order.count}`}</Text>
       </Body>
       <Right>
         <View style={{ flexDirection: 'row' }}>
-          <Button small transparent onPress={zero}>
+          <Button small transparent onPress={remove}>
             <Icons.Delete />
           </Button>
-          <Button small transparent onPress={decrement}>
+          <Button small transparent onPress={decrementCount}>
             <Icons.Decrement />
           </Button>
-          <Button small transparent onPress={increment}>
+          <Button small transparent onPress={incrementCount}>
             <Icons.Increment />
           </Button>
         </View>

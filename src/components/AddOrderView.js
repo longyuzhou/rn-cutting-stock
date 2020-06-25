@@ -1,55 +1,40 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Button } from 'react-native';
-import { Input, Item, Label } from 'native-base';
-import * as Icons from './Icons';
-import { toFloat, toInt } from '../utils';
 
-export default function AddOrderView({ addOrder }) {
-  const [length, setLength] = React.useState('');
-  const [lengthValid, setLengthValid] = React.useState(true);
+import { Context } from '../context';
+import OrderLengthInput from './OrderLengthInput';
+import OrderCountInput from './OrderCountInput';
 
-  const [count, setCount] = React.useState('');
-  const [countValid, setCountValid] = React.useState(true);
+import i18n from '../i18n';
 
-  const onLengthChange = (text) => {
-    setLength(text);
-    const val = toFloat(text);
-    setLengthValid(text === '' || (!isNaN(val) && val > 0));
-  };
-
-  const onCountChange = (text) => {
-    setCount(text);
-    const val = toInt(text);
-    setCountValid(text === '' || (!isNaN(val) && val > 0));
-  };
+export default function AddOrderView() {
+  const { pendingOrderLength, pendingOrderCount, setOrders } = useContext(Context);
 
   const submit = () => {
-    if (length === '' || !lengthValid || count === '' || !countValid) {
+    if (isNaN(pendingOrderLength) || isNaN(pendingOrderCount)) {
       return;
     }
 
-    addOrder({ length: toFloat(length), count: toInt(count) });
-
-    setLength('');
-    setCount('');
+    const length = pendingOrderLength;
+    const count = pendingOrderCount;
+    setOrders((orders) => {
+      const pos = orders.findIndex((order) => order.length === length);
+      if (pos > -1) {
+        orders[pos].count += count;
+      } else {
+        orders.unshift({ length, count });
+      }
+      return orders.slice();
+    });
   };
 
   return (
     <View style={{ flexDirection: 'row' }}>
-      <Item style={{ flex: 1, marginRight: 5 }}>
-        <Label>尺寸:</Label>
-        <Input value={length} keyboardType="numeric" onChangeText={onLengthChange} />
-        {length !== '' ? lengthValid ? <Icons.Valid /> : <Icons.Invalid /> : null}
-      </Item>
-
-      <Item style={{ flex: 1, marginRight: 5 }}>
-        <Label>数量:</Label>
-        <Input value={count} keyboardType="numeric" onChangeText={onCountChange} />
-        {count !== '' ? countValid ? <Icons.Valid /> : <Icons.Invalid /> : null}
-      </Item>
+      <OrderLengthInput styles={{ flex: 1 }} />
+      <OrderCountInput styles={{ flex: 1 }} />
 
       <View style={{ justifyContent: 'center' }}>
-        <Button title="添加" onPress={submit} />
+        <Button title={i18n.t('add')} onPress={submit} />
       </View>
     </View>
   );

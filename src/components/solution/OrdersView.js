@@ -1,25 +1,27 @@
 import { StringBuffer } from '../../utils';
 
+import i18n from '../../i18n';
+
 export default function OrdersView({ stockLength, kerf, orders }) {
   const html = new StringBuffer();
   html.append(`
     <div>
-      <strong>订单</strong>
+      <strong>${i18n.t('order')}</strong>
       <div class="d-flex flex-column flex-sm-row">
         <div class="w-100 w-sm-50">
-          <span class="p-1">材料长度:</span>
+          <span class="p-1">${i18n.t('stockLength')}:</span>
           <span class="p-1">${stockLength}</span>
         </div>
         <div class="w-100 w-sm-50">
-          <span class="p-1">切割损耗:</span>
+          <span class="p-1">${i18n.t('kerf')}:</span>
           <span class="p-1">${kerf}</span>
         </div>
       </div>
       <table class="table table-striped table-bordered">
         <thead>
           <tr>
-            <th>长度</th>
-            <th>数量</th>
+            <th>${i18n.t('length')}</th>
+            <th>${i18n.t('quantity')}</th>
           </tr>
         </thead>
         <tbody>
@@ -27,6 +29,6 @@ export default function OrdersView({ stockLength, kerf, orders }) {
   orders.forEach((order) => {
     html.append(`<tr><td>${order.length}</td><td>${order.count}</td></tr>`);
   });
-  html.append('</tbody></table>');
+  html.append('</tbody></table></div>');
   return html.toString();
 }

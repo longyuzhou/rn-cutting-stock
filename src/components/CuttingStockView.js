@@ -1,106 +1,60 @@
-import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
-import { Input, Button, Text, Item, Label } from 'native-base';
+import React, { useContext, useState, useEffect } from 'react';
+import { View, FlatList, Alert } from 'react-native';
+import { Button, Text } from 'native-base';
+
+import { Context, checkOrders } from '../context';
 import OrderView from './OrderView';
 import AddOrderView from './AddOrderView';
-import * as Icons from './Icons';
-import { solve, toFloat } from '../utils';
+import StockLengthInput from './StockLengthInput';
+import KerfInput from './KerfInput';
+import { solve } from '../utils';
+
+import i18n from '../i18n';
 
 export default function CuttingStockView({ navigation }) {
-  const [stockLength, setStockLength] = React.useState('600');
-  const [stockLengthValid, setStockLengthValid] = React.useState(true);
-  const onStockLengthChange = (text) => {
-    setStockLength(text);
-    const f = toFloat(text);
-    setStockLengthValid(!isNaN(f) && f > 0);
-  };
+  const {
+    stockLength,
+    stockLengthValid,
+    kerf,
+    kerfValid,
+    orders,
+    setSolution,
+  } = useContext(Context);
+  const [valid, setValid] = useState(true);
 
-  const [kerf, setKerf] = React.useState('0.1');
-  const [kerfValid, setKerfValid] = React.useState(true);
-  const onKerfChange = (text) => {
-    setKerf(text);
-    const f = toFloat(text);
-    setKerfValid(text === '' || (!isNaN(f) && f >= 0));
-  };
+  useEffect(() => {
+    const v = stockLengthValid && kerf && checkOrders({ stockLength, orders });
+    setValid(v);
+  }, [stockLength, stockLengthValid, kerf, kerfValid, orders]);
 
-  const [orders, setOrders] = React.useState([
-    { length: 100, count: 10 },
-    { length: 190, count: 10 },
-    { length: 300, count: 10 },
-  ]);
-
-  const addOrder = ({ length, count }) => {
-    if (typeof length !== 'number' || isNaN(length) || typeof count !== 'number' || isNaN(count)) {
+  const onSubmit = () => {
+    if (!valid) {
+      Alert.alert('Please check your input');
       return;
     }
 
-    const pos = orders.findIndex((order) => order.length === length);
-    if (pos > -1) {
-      orders[pos].count += count;
-    } else {
-      orders.unshift({ length, count });
-    }
-    setOrders(orders.slice());
-  };
-
-  const modifyOrder = (order) => {
-    if (order.count <= 0) {
-      return removeOrder(order);
-    }
-
-    const pos = orders.findIndex((item) => item.length === order.length);
-    if (pos < 0) {
-      return;
-    }
-    orders[pos] = order;
-    setOrders(orders.slice());
-  };
-
-  const removeOrder = (order) => {
-    const pos = orders.findIndex((item) => item.length === order.length);
-    if (pos < 0) {
-      return;
-    }
-
-    orders.splice(pos, 1);
-    setOrders(orders.slice());
-  };
-
-  const onSolveButtonPress = () => {
-    if (!stockLengthValid || !kerfValid) {
-      return;
-    }
-
-    const solution = solve(toFloat(stockLength), kerf !== '' ? toFloat(kerf) : 0, orders);
-    navigation.navigate('Output', solution);
+    setSolution(solve(stockLength, kerf, orders));
+    navigation.navigate('Solution');
   };
 
   return (
     <View style={{ flex: 1, flexDirection: 'column' }}>
       <View style={{ margin: 5 }}>
-        <Item>
-          <Label>材料长度:</Label>
-          <Input keyboardType="numeric" value={stockLength} onChangeText={onStockLengthChange} />
-          {stockLengthValid ? <Icons.Valid /> : <Icons.Invalid />}
-        </Item>
-
-        <Item>
-          <Label>切割损耗:</Label>
-          <Input keyboardType="numeric" value={kerf} onChangeText={onKerfChange} />
-          {kerfValid ? <Icons.Valid /> : <Icons.Invalid />}
-        </Item>
-
-        <AddOrderView addOrder={addOrder} />
+        <StockLengthInput />
+        <KerfInput />
+        <AddOrderView />
       </View>
 
       <FlatList
         data={orders}
         keyExtractor={(item) => `${item.length}:${item.count}`}
-        renderItem={({ item }) => <OrderView order={item} modifyOrder={modifyOrder} />}
+        renderItem={({ item, index }) => (
+          <OrderView order={item} index={index} />
+        )}
       />
 
-      <Button block onPress={onSolveButtonPress} style={{ margin: 5 }}>
-        <Text>计算</Text>
+      <Button block onPress={onSubmit} style={{ margin: 5 }}>
+        <Text>{i18n.t('solve')}</Text>
       </Button>
     </View>
   );

@@ -1,5 +1,7 @@
 import { StringBuffer } from '../../utils';
 
+import i18n from '../../i18n';
+
 export default function MaterialWastesView({ layoutPatterns }) {
   const data = [];
   layoutPatterns.forEach(({ repetition, materialWaste }) => {
@@ -18,16 +20,18 @@ export default function MaterialWastesView({ layoutPatterns }) {
   const html = new StringBuffer();
   html.append(`
   <div>
-    <strong>余料详情:</strong>
+    <strong>${i18n.t('materialWasteDetail')}:</strong>
     <table class="table table-striped table-bordered">
       <thead>
         <tr>
-          <th>长度</th>
-          <th>数量</th>
+          <th>${i18n.t('length')}</th>
+          <th>${i18n.t('quantity')}</th>
         </tr>
       </thead>
       <tbody>`);
-  data.forEach((item) => html.append(`<tr><td>${item.length}</td><td>${item.count}</td></tr>`));
+  data.forEach((item) =>
+    html.append(`<tr><td>${item.length}</td><td>${item.count}</td></tr>`)
+  );
   html.append('</tbody></table></div>');
   return html.toString();
 }

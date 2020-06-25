@@ -1,8 +1,8 @@
 import React from 'react';
 import { Icon } from 'native-base';
 
-const Valid = () => <Icon type="FontAwesome" name="check" style={{ color: '#03cc4c' }} />;
-const Invalid = () => <Icon type="FontAwesome" name="exclamation" style={{ color: '#ff3b2f' }} />;
+const Valid = () => <Icon type="AntDesign" name="check" style={{ color: '#03cc4c' }} />;
+const Invalid = () => <Icon type="AntDesign" name="exclamation" style={{ color: '#ff3b2f' }} />;
 
 const Delete = () => <Icon type="FontAwesome" name="trash" style={{ color: '#ff3b2f' }} />;
 const Decrement = () => <Icon type="FontAwesome" name="minus" style={{ color: '#ff3b2f' }} />;

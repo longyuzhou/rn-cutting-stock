@@ -13,6 +13,9 @@
     "@react-navigation/stack": "^5.5.1",
     "base-64": "^0.1.0",
     "expo": "~37.0.3",
+    "expo-localization": "~8.1.0",
+    "expo-print": "~8.1.0",
+    "i18n-js": "^3.7.0",
     "native-base": "^2.13.12",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
@@ -23,8 +26,7 @@
     "react-native-screens": "~2.2.0",
     "react-native-vector-icons": "^6.6.0",
     "react-native-web": "~0.11.7",
-    "react-native-webview": "^10.3.1",
-    "expo-print": "~8.1.0"
+    "react-native-webview": "8.1.1"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.1.0",
